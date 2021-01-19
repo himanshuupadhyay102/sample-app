@@ -22,11 +22,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Run clean
+      - name: Compile step
         run: sbt clean compile
   test:
       runs-on: ubuntu-latest
-
+      needs: 
+        - build
       steps:
       - name: Run tests 
         run: sbt test
@@ -34,7 +35,7 @@ jobs:
   package:
       runs-on: ubuntu-18.04
       needs:
-        - build
+        - test
       steps:
         - name: Git Chekout
           uses: actions/checkout@v2
@@ -66,7 +67,8 @@ jobs:
       - package
     
     steps:
-      - uses: actions/checkout@v2
+      - name: Git Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
