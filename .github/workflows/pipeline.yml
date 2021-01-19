@@ -24,16 +24,13 @@ jobs:
         java-version: 1.8
     - name: Run clean
       run: sbt clean compile
-  
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Run tests 
       run: sbt clean coverage test coverageReport
 
-    #- name: Run coverage
-     
-     #run: sbt coverage
-    
-    #- name: Run coverageReport 
-     # run: sbt coverageReport
   package:
     runs-on: ubuntu-18.04
     needs:
@@ -51,12 +48,12 @@ jobs:
       - name: Copy Artifacts To Codedeploy
         run: cp /home/runner/work/sample-app/sample-app/target/universal/sbt-scoverage-samples-1.5.1.zip codedeploy/simple-scala-project-1.0.zip
         
-      - name: Unzip the zip folder
-        run: unzip codedeploy/simple-scala-project-1.0.zip -d codedeploy/
-      - name: Deleting zip folder
-        run: rm codedeploy/simple-scala-project-1.0.zip
-      - name: creating zip folder
-        run: zip -r codedeploy.zip *
+      #- name: Unzip the zip folder
+        #run: unzip codedeploy/simple-scala-project-1.0.zip -d codedeploy/
+      #- name: Deleting zip folder
+        #run: rm codedeploy/simple-scala-project-1.0.zip
+      #- name: creating zip folder
+        #run: zip -r codedeploy.zip *
       - name: Configure my AWS Credentils
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -65,7 +62,7 @@ jobs:
            aws-region           : ${{ env.AWS_REGION_NAME }}
 
       - name: Copy our Deployment package to S3 bucket
-        run : aws s3 cp codedeploy.zip s3://github-actions10/p3-codedeploy.zip
+        run : aws s3 cp simple-scala-project-1.0.zip s3://github-actions10/p3-codedeploy.zip
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
