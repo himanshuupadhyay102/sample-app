@@ -36,6 +36,7 @@ jobs:
       runs-on: ubuntu-18.04
       needs:
         - test
+        - sonarcloud
       steps:
         - name: Git Chekout
           uses: actions/checkout@v2
@@ -63,8 +64,6 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-    needs: 
-      - package
     
     steps:
       - name: Git Checkout
