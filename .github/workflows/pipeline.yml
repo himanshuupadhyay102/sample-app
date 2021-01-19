@@ -29,7 +29,7 @@ jobs:
 
     steps:
     - name: Run tests 
-      run: sbt clean coverage test coverageReport
+      run: sbt test
 
   package:
     runs-on: ubuntu-18.04
@@ -62,7 +62,7 @@ jobs:
            aws-region           : ${{ env.AWS_REGION_NAME }}
 
       - name: Copy our Deployment package to S3 bucket
-        run : aws s3 cp simple-scala-project-1.0.zip s3://github-actions10/p3-codedeploy.zip
+        run : aws s3 cp codedeploy/simple-scala-project-1.0.zip s3://github-actions10/p3-codedeploy.zip
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
