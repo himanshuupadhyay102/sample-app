@@ -44,9 +44,9 @@ jobs:
           run: sbt dist
         - name: Make Directory
           run: mkdir -p codedeploy
-        - name: echo
-          run: pwd
-        - name: Copy Artifacts To Codedeploy
+        - name: Copy JAR Artifacts To Codedeploy
+          run: cp /home/runner/work/sample-app/sample-app/target/scala-2.12/sbt-scoverage-samples_2.12-1.5.1.jar codedeploy/scala-project-1.0.jar
+        - name: Copy Zip Artifacts To Codedeploy
           run: cp /home/runner/work/sample-app/sample-app/target/universal/sbt-scoverage-samples-1.5.1.zip codedeploy/scala-project-1.0.zip
         - name: Configure my AWS Credentils
           uses: aws-actions/configure-aws-credentials@v1
@@ -55,8 +55,10 @@ jobs:
              aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_KEY }}
              aws-region           : ${{ env.AWS_REGION_NAME }}
 
-        - name: Copy our Deployment package to S3 bucket
-          run : aws s3 cp codedeploy/scala-project-1.0.zip s3://github-actions10/p3-codedeploy.zip
+        - name: Copy our ZIP package to S3 bucket
+          run : aws s3 cp codedeploy/scala-project-1.0.zip s3://github-actions10/codedeploy.zip
+        - name: Copy our JAR package to S3 bucket
+          run : aws s3 cp codedeploy/scala-project-1.0.jar s3://github-actions10/codedeploy.jar
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
